@@ -1,23 +1,55 @@
+import axios from "axios";
 import React, { useState } from "react";
 
 const PostForm = () => {
-  const [user, setUser] = useState({
-    userName:'',
-    title:'',
-    body:''
-  });
-  
-  const handleChange = (e) => {
-   setUser({e.target.name:e.target.value})
-   
+  const [user, setUser] = useState("");
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
 
+  const handleUser = (e) => {
+    setUser(e.target.value);
   };
+  const handleTitle = (e) => {
+    setTitle(e.target.value);
+  };
+  const handleBody = (e) => {
+    setBody(e.target.value);
+  };
+  const HandleSubmit = (e) => {
+    e.preventDefault();
+    const obj = {
+      user: e.target[0].value,
+      title: e.target[1].value,
+      bod: e.target[2].value
+    };
+    axios
+      .post("https://jsonplaceholder.typicode.com/posts", obj)
+      .then((res) => console.log("Response DAta", res))
+      .catch((err) => console.log("Error", err));
+  };
+
   return (
-    <div>
-      <input name="user" placeholder='Name' value={user.userName} onChange={handleChange} />
-      <input name="title" placeholder='Title' value={user.title} onChange={handleChange} />
-      <input name="body" placeholder='Description' value={user.body} onChange={handleChange} />
-    </div>
+    <form onSubmit={HandleSubmit}>
+      <input
+        name="user"
+        placeholder="Name"
+        value={user}
+        onChange={handleUser}
+      />
+      <input
+        name="title"
+        placeholder="Title"
+        value={title}
+        onChange={handleTitle}
+      />
+      <input
+        name="body"
+        placeholder="Description"
+        value={body}
+        onChange={handleBody}
+      />
+      <button type="submit">Submit</button>
+    </form>
   );
 };
 
